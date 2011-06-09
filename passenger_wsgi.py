@@ -1,5 +1,5 @@
 import sys, os
-INTERP = os.path.expanduser("~/bin/python")
+INTERP = os.path.expanduser("~/env/bin/python")
 if sys.executable != INTERP: os.execl(INTERP, INTERP, *sys.argv)
 
 import tornado.ioloop
