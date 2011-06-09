@@ -4,6 +4,7 @@ if sys.executable != INTERP: os.execl(INTERP, INTERP, *sys.argv)
 
 import tornado.ioloop
 import tornado.web
+import tornado.wsgi
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
