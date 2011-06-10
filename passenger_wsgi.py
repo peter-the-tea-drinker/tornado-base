@@ -8,7 +8,7 @@ import tornado.wsgi
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write("Hello, world")
+        self.write("Hello, world!")
 
 application = tornado.wsgi.WSGIApplication([
         (r"/", MainHandler),
