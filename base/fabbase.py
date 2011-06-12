@@ -1,5 +1,8 @@
-CODE_DIR = '~/example.com'
-REPO = 'git@github.com:peter-the-tea-drinker/tornado-base.git'
+CODE_DIR = '~/example'
+BASE_DIR = '~/base'
+
+REPO = 'git://github.com/peter-the-tea-drinker/tornado-base.git'
+BASE_REPO = 'git://github.com/peter-the-tea-drinker/tornado-base.git'
 TAG = ''
 
 from fabric.api import local, settings, abort, run, cd, env
@@ -15,6 +18,9 @@ update_settings(code_dir=CODE_DIR,repo=REPO,release_tag=TAG)
 
 def hello():
     print("Hello world!")
+
+# deploy base. This means you can "import base.fabbase", "import base.*_base"
+# for now, this means pulling the base of the repo into the source dir
 
 def deploy():
     code_dir = settings_dict['code_dir']
