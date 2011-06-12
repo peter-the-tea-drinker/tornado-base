@@ -1,31 +1,28 @@
-CODE_DIR = '~/example'
-BASE_DIR = '~/base'
-
-REPO = 'git://github.com/peter-the-tea-drinker/tornado-base.git'
-BASE_REPO = 'git://github.com/peter-the-tea-drinker/tornado-base.git'
-TAG = ''
-
 from fabric.api import local, settings, abort, run, cd, env
-# dump this into the wsgi 
+# Common for both stage and prod, since stage and prod must be identical.
+APP_REPO = 'git://github.com/peter-the-tea-drinker/tornado-base-example.git'
+APP_TAG = ''
 
-settings_dict = dict()
+STAGE_APP_DIR = '~/stage.example.com'
+PROD_APP_DIR = '~/prod.example.com'
 
-def update_settings(**updated_settings):
-    settings_dict.update(updated_settings)
+BASE_DIR = '~/tornado-base'
+BASE_REPO = 'git://github.com/peter-the-tea-drinker/tornado-base.git'
+BASE_TAG = ''
 
-# set defaults for settings_dict
-update_settings(code_dir=CODE_DIR,repo=REPO,release_tag=TAG)
+def stage():
+    app_dir = STAGE_APP_DIR
+    _deploy(code_dir=BASE_DIR,repo=BASE_REPO,release_tag=BASE_TAG)
+    _deploy(code_dir=app_dir,repo=APP_REPO,release_tag=APP_TAG)
+    _restart(code_dir=app_dir)
 
-def hello():
-    print("Hello world!")
+def prod():
+    app_dir = PROD_APP_DIR
+    _deploy(code_dir=BASE_DIR,repo=BASE_REPO,release_tag=BASE_TAG)
+    _deploy(code_dir=app_dir,repo=APP_REPO,release_tag=APP_TAG)
+    _restart(code_dir=app_dir)
 
-# deploy base. This means you can "import base.fabbase", "import base.*_base"
-# for now, this means pulling the base of the repo into the source dir
-
-def deploy():
-    code_dir = settings_dict['code_dir']
-    repo = settings_dict['repo']
-    release_tag = settings_dict['release_tag']
+def _deploy(code_dir,repo,release_tag):
     with settings(warn_only=True):
         if run("test -d %s/.git" % code_dir).failed:
             run("git clone %s %s" % (repo,code_dir))
@@ -33,5 +30,8 @@ def deploy():
         run("git pull")
         if release_tag:
             run('git checkout :/"%s"'%release_tag)
+
+def _restart(code_dir):
+    with cd(code_dir):
         run("touch tmp/restart.txt")
 
