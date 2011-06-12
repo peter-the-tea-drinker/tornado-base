@@ -1,6 +1,1 @@
-To use:
-
-cp example_fabfile.py fabfile.py
-cp example_passenger_wsgi.py passenger_wsgi.py
-
 
