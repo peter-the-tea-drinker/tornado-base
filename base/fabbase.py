@@ -1,14 +1,36 @@
 from fabric.api import local, settings, abort, run, cd, env
 # Common for both stage and prod, since stage and prod must be identical.
-APP_REPO = 'git://github.com/peter-the-tea-drinker/tornado-base-example.git'
-APP_TAG = ''
 
-STAGE_APP_DIR = '~/stage.example.com'
-PROD_APP_DIR = '~/prod.example.com'
+try: 
+    import config
+except:
+    print 'No config file, please create a file (your_app/config.py)'
 
-BASE_DIR = '~/tornado-base'
-BASE_REPO = 'git://github.com/peter-the-tea-drinker/tornado-base.git'
-BASE_TAG = ''
+APP_REPO = config.APP_REPO
+APP_TAG = config.APP_TAG
+
+STAGE_APP_DIR = config.STAGE_APP_DIR
+PROD_APP_DIR = config.PROD_APP_DIR
+
+BASE_DIR = config.BASE_DIR
+BASE_REPO = config.BASE_REPO
+BASE_TAG = config.BASE_TAG
+
+LOCAL_BASE_DIR = config.LOCAL_BASE_DIR
+LOCAL_APP_DIR = config.LOCAL_APP_DIR
+
+def dev():
+    import os, sys
+    import base.appbase
+    import main
+    import config
+    from appbase import orm
+    main.make_fixtures()
+    base.appbase.tornado_serve(main.urls,cookie_secret=config.COOKIE_SECRET)
+
+def test():
+    # run local unit tests
+    result = local('nosetests', capture=False)
 
 def stage():
     app_dir = STAGE_APP_DIR
