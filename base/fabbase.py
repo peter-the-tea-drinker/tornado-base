@@ -26,7 +26,7 @@ def dev():
     import config
     from appbase import orm
     main.make_fixtures()
-    base.appbase.tornado_serve(main.urls,cookie_secret=config.COOKIE_SECRET)
+    base.appbase.tornado_serve(main.urls,debug=True,cookie_secret=config.COOKIE_SECRET)
 
 def test():
     # run local unit tests

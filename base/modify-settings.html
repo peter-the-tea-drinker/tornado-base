@@ -1,0 +1,6 @@
+<form action="/m/{{ token }}" method="post">
+<label for="password">password: </label>
+<input type="password" name="password"><BR>
+<input type="submit" value="Submit">
+{% raw xsrf_form_html() %}
+</form>
