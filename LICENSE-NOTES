@@ -1,0 +1,25 @@
+Note to self: when including code from other, open-source projects:
+
+    0) Make sure the license is compatible. 
+    1) Initial commit - just the unmodified file + date and link, to establish
+history.
+    2) Include copyright notices in all derivative files. 
+    3) Duplicate "portions copyright" notice in the LICENSE file.
+    4) Link back to the original.
+
+Paste in:
+
+# Copyright (c) Me, year.
+#
+# my license
+#
+# Derived from (link), at (project link), retrieved (date)
+#
+# Portions copyright (c) <original authors>, <date>
+#
+# their license
+#
+
+CODE STARTS HERE.
+
+
