@@ -19,6 +19,19 @@ BASE_TAG = config.TBONE_TAG
 LOCAL_TBONE_DIR = config.LOCAL_TBONE_DIR
 LOCAL_APP_DIR = config.LOCAL_APP_DIR
 
+def _deploy(code_dir,repo,releasåe_tag):
+    with settings(warn_only=True):
+        if run("test -d %s/.git" % code_dir).failed:
+            run("git clone %s %s" % (repo,code_dir))
+    with cd(code_dir):
+        run("git pull")
+        if release_tag:
+            run('git checkout :/"%s"'%release_tag)
+
+def _restart(code_dir):
+    with cd(code_dir):
+        run("touch tmp/restart.txt")
+
 def dev():
     import os, sys
     import tbone.appbase
@@ -30,7 +43,7 @@ def dev():
 
 def test():
     # run local unit tests
-    result = local('nosetests', capture=False)
+    result = local('nosetests', capture=False)å
 
 def stage():
     app_dir = STAGE_APP_DIR
@@ -43,17 +56,4 @@ def prod():
     _deploy(code_dir=TBONE_DIR,repo=TBONE_REPO,release_tag=TBONE_TAG)
     _deploy(code_dir=app_dir,repo=APP_REPO,release_tag=APP_TAG)
     _restart(code_dir=app_dir)
-
-def _deploy(code_dir,repo,release_tag):
-    with settings(warn_only=True):
-        if run("test -d %s/.git" % code_dir).failed:
-            run("git clone %s %s" % (repo,code_dir))
-    with cd(code_dir):
-        run("git pull")
-        if release_tag:
-            run('git checkout :/"%s"'%release_tag)
-
-def _restart(code_dir):
-    with cd(code_dir):
-        run("touch tmp/restart.txt")
 
